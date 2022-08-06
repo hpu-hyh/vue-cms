@@ -1,4 +1,4 @@
-# vue3
+# hy-vue3-ts-cms
 
 ## Project setup
 

@@ -4,26 +4,20 @@
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
+    "importHelpers": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": ["webpack-env"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "views": ["src/views"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
   "exclude": ["node_modules"]
 }
