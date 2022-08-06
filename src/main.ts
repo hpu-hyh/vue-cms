@@ -1,15 +1,15 @@
 import { createApp } from 'vue'
+
+import { registerApp } from './global'
+
 import App from './App.vue'
 
-import './assets/css/index.css'
-import 'normalize.css'
-
 import router from './router'
-import store, { setupStore } from './store'
-
-import registerApp from './global'
+import store from './store'
 
 const app = createApp(App)
+
 registerApp(app)
-setupStore()
-app.use(router).use(store).mount('#app')
+app.use(router)
+app.use(store)
+app.mount('#app')
