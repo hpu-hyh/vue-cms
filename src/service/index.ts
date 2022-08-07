@@ -7,8 +7,19 @@ import { API_BASE_URL, TIME_OUT } from './request/config'
 const hyRequest = new HYRequest({
   baseURL: API_BASE_URL,
   timeout: TIME_OUT,
-  hooks: {
-    //对应拦截器
+  Interceptors: {
+    requestInterceptor: (config) => {
+      return config
+    },
+    requestInterceptorCatch: (err) => {
+      return err
+    },
+    responseInterceptor: (res) => {
+      return res
+    },
+    responseInterceptorCatch: (err) => {
+      return err
+    }
   }
 })
 

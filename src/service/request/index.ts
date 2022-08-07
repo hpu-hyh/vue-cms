@@ -1,19 +1,24 @@
 // 使用类封装axios
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
+import type { HYRequesInterceptors, HYRequestConfig } from './type'
 
-// interface HYRequesInterceptors {
-//   requestInterceptor: (config: AxiosRequestConfig) => AxiosRequestConfig
-//   requestInterceptorCatch: (error: any) => any
-//   // responseInterceptor:()=>any
-//   // responseInterceptorCatch:()
-// }
 class HYRequest {
   instance: AxiosInstance
-  constructor(config: AxiosRequestConfig) {
-    this.instance = axios.create(config)
+  Interceptors?: HYRequesInterceptors
 
-    this.instance.interceptors.request.use()
+  constructor(config: HYRequestConfig) {
+    this.instance = axios.create(config)
+    this.Interceptors = config.Interceptors
+    this.instance.interceptors.request.use(
+      this.Interceptors?.requestInterceptor,
+      this.Interceptors?.requestInterceptorCatch
+    )
+
+    this.instance.interceptors.response.use(
+      this.Interceptors?.responseInterceptor,
+      this.Interceptors?.responseInterceptorCatch
+    )
   }
 
   request(config: AxiosRequestConfig): void {
