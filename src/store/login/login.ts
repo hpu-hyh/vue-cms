@@ -21,16 +21,16 @@ const loginModule: Module<ILoginState, IRootState> = {
     }
   },
   actions: {
-    // async accountLoginAction({ commit }, payload: IAccount) {
-    //   // console.log('执行accountLoginAction', payload, commit)
-    //   const loginResult = await accountLoginRequest(payload)
-    //   // @ts-igaore
-    //   // console.log(loginResult.id)
-    //   console.log(loginResult.data.id)
-    //   console.log(loginResult)
-    //   // const { id, token } = loginResult.data
-    //   // commit('changeToken', token)
-    // }
+    async accountLoginAction({ commit }, payload: IAccount) {
+      // console.log('执行accountLoginAction', payload, commit)
+      const loginResult = await accountLoginRequest(payload)
+      // @ts-igaore
+      // console.log(loginResult.id)
+      console.log(loginResult.data.id, commit)
+      console.log(loginResult)
+      // const { id, token } = loginResult.data
+      // commit('changeToken', token)
+    }
   }
 }
 
