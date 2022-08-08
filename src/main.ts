@@ -11,6 +11,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import hyRequest from './service'
+import { setupStore } from './store'
 
 const app = createApp(App)
 
@@ -18,6 +19,7 @@ registerApp(app)
 app.use(router)
 app.use(store)
 app.mount('#app')
+setupStore()
 
 hyRequest.request({
   url: '/home',
