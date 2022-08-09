@@ -15,10 +15,25 @@ import {
   ElFormItem,
   ElInput,
   ElLink,
-  ElCheckbox
+  ElCheckbox,
+  ElContainer,
+  ElMain,
+  ElHeader,
+  ElMenu,
+  ElSubmenu,
+  ElMenuItem,
+  ElMenuItemGroup
 } from 'element-plus'
 const components = [
+  ElMenu,
+  ElSubmenu,
+  ElMenuItem,
+  ElMenuItemGroup,
   ElLink,
+  ElAside,
+  ElContainer,
+  ElMain,
+  ElHeader,
   ElCheckbox,
   ElForm,
   ElFormItem,
