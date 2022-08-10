@@ -2,7 +2,7 @@
 
 module.exports = {
   // outputDir: './build',
-  // publicPath: './',
+  publicPath: './',
   devServer: {
     proxy: {
       '/api': {
