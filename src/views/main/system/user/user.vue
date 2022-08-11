@@ -1,14 +1,15 @@
 <template>
   <div class="user">
     <div class="search">
-      <HyForm :formItems="formItems" />
+      <HyForm v-bind="searchFormConfig" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import HyForm, { IFormItem } from '@/base-ui/form'
+import HyForm from '@/base-ui/form'
+import { searchFormConfig } from './config/search.config'
 
 export default defineComponent({
   components: {
@@ -16,34 +17,8 @@ export default defineComponent({
   },
   name: 'user',
   setup() {
-    const formItems: IFormItem[] = [
-      {
-        type: 'input',
-        label: '用户名',
-        rules: [],
-        placeholder: '请输入用户名'
-      },
-      {
-        type: 'password',
-        label: '密码',
-        rules: [],
-        placeholder: '请输入用户名'
-      },
-      {
-        type: 'input',
-        label: '创建的时间',
-        rules: [],
-        placeholder: '请输入用户名'
-      },
-      {
-        type: 'datepicker',
-        label: '喜欢的运动',
-        rules: [],
-        placeholder: '请输入用户名'
-      }
-    ]
     return {
-      formItems
+      searchFormConfig
     }
   }
 })
