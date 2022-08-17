@@ -15,7 +15,8 @@ import { setupStore } from './store'
 const app = createApp(App)
 
 registerApp(app)
-app.use(router)
 app.use(store)
-app.mount('#app')
 setupStore()
+app.use(router)
+
+app.mount('#app')
