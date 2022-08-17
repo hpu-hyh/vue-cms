@@ -1,28 +1,48 @@
 <template>
   <div class="user">
     <div class="search">
-      <HyForm v-bind="searchFormConfig" />
+      <PageSearch :searchFormConfig="searchFormConfig"></PageSearch>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import HyForm from '@/base-ui/form'
+import { computed, defineComponent } from 'vue'
+import { userStore } from '@/store'
 import { searchFormConfig } from './config/search.config'
+import PageSearch from '@/components/page-search'
 
 export default defineComponent({
   components: {
-    HyForm
+    PageSearch
   },
   name: 'user',
   setup() {
+    const store = userStore()
+    store.dispatch('system/getPageListAction', {
+      pageUrl: './users/list',
+      queryInfo: {
+        offset: 0,
+        size: 10
+      }
+    })
+    const userList = computed(() => store.state.system.userList)
+    // const userCount = computed(() => store.state.system.userCount)
     return {
-      searchFormConfig
+      searchFormConfig,
+      userList
     }
   }
 })
 </script>
 
-<!-- <style scoped>
-</style> -->
+<style scoped lang="less">
+.header {
+  color: rgb(10, 96, 189);
+}
+
+.handle-btns {
+  text-align: right;
+  padding: 0 50px 50px 0;
+}
+</style>
