@@ -32,7 +32,8 @@ import {
   ElOption,
   ElDatePicker,
   ElBreadcrumb,
-  ElBreadcrumbItem
+  ElBreadcrumbItem,
+  ElTableColumn
 } from 'element-plus'
 const components = [
   ElMenu,
@@ -67,7 +68,9 @@ const components = [
   ElOption,
   ElDatePicker,
   ElBreadcrumb,
-  ElBreadcrumbItem
+  ElBreadcrumbItem,
+  ElTable,
+  ElTableColumn
 ]
 export default function (app: App): void {
   for (const cpn of components) {
