@@ -1,22 +1,25 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="user">
     <PageSearch :searchFormConfig="searchFormConfig"></PageSearch>
-
     <div class="content">
-      <HyTable :listData="userList" :propList="propList">
+      <HyTable :listData="userList" :propList="propList" :showIndexColumn="showIndexColumn"
+        :showSelectColumn="showSelectColumn">
         <template #status="scope">
           <el-button plain size="mini" :type="scope.row.enable ? 'success' : 'danger'">
             {{ scope.row.enable ? '启用' : '禁用' }}
           </el-button>
         </template>
-        <template #createAt="scope">
-          <strong>{{ scope.row.createAt }}</strong>
+        <!-- <template #createAt="scope">
+          <span>{{ $filter.formatTime(scope.row.createAt) }}</span>
         </template>
+        <template #updateAt="scope">
+          <span>{{ $filter.formatTime(scope.row.updateAt) }}</span>
+        </template> -->
       </HyTable>
     </div>
   </div>
 </template>
-~
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { userStore } from '@/store'
@@ -56,10 +59,15 @@ export default defineComponent({
       { prop: 'createAt', label: '创建时间', minWidth: '250', slotName: 'createAt' },
       { prop: 'updateAt', label: '更新时间', minWidth: '250', slotName: 'updateAt' }
     ]
+    const showIndexColumn = true
+    const showSelectColumn = true
+
     return {
       searchFormConfig,
       userList,
-      propList
+      propList,
+      showIndexColumn,
+      showSelectColumn
     }
   }
 })
