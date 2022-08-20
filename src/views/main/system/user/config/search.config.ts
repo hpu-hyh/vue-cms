@@ -1,31 +1,37 @@
 import { IForm } from '@/base-ui/form'
 
 export const searchFormConfig: IForm = {
-  labelWidth: '120px',
-  itemLayout: {
-    padding: '10px 40px'
-  },
-  colLayout: {
-    span: 8
-  },
   formItems: [
-    { field: 'id', type: 'input', label: '用户名', placeholder: '请输入用户名', rules: [] },
-    { field: 'name', type: 'input', label: '真实姓名', placeholder: '请输入真实姓名', rules: [] },
     {
-      field: 'password',
+      field: 'name',
       type: 'input',
-      label: '密码',
-      placeholder: '请输入密码',
+      label: '用户名',
+      placeHolder: '请输入用户名',
       rules: []
     },
     {
-      field: 'sport',
+      field: 'realname',
+      type: 'input',
+      label: '真实姓名',
+      placeHolder: '请输入真实姓名',
+      rules: []
+    },
+    {
+      field: 'cellphone',
+      type: 'input',
+      label: '手机号码',
+      placeHolder: '请输入手机号码',
+      rules: []
+    },
+    {
+      field: 'enable',
       type: 'select',
-      label: '喜欢的运动',
-      placeholder: '请选择喜欢的运动',
+      label: '状态',
+      placeHolder: '请选择状态',
+      rules: [],
       options: [
-        { title: '篮球', value: 'baskerball' },
-        { title: '足球', value: 'football' }
+        { label: '启用', value: 1 },
+        { label: '禁用', value: 0 }
       ]
     },
     {
@@ -33,11 +39,14 @@ export const searchFormConfig: IForm = {
       type: 'datepicker',
       label: '创建时间',
       rules: [],
-      otherOptions: {
+      otherOption: {
         startPlaceholder: '开始时间',
         endPlaceholder: '结束时间',
         type: 'daterange'
       }
     }
-  ]
+  ],
+  labelWidth: '100px',
+  itemStyle: { padding: '10px 40px' },
+  colLayout: { span: 8 }
 }

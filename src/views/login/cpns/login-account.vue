@@ -1,63 +1,81 @@
 <template>
-  <div class="login-account">
-    <el-form label-width="60px" :rules="rules" :model="account" ref="formRef">
-      <el-form-item label="账号" prop="name">
-        <el-input v-model="account.name" />
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="account.password" show-password />
-      </el-form-item>
-    </el-form>
-  </div>
+  <el-form :model="account" label-width="60px" ref="formRef" :rules="accountRules">
+    <el-form-item label="账号" prop="name">
+      <el-input v-model="account.name" />
+    </el-form-item>
+    <el-form-item label="密码" prop="password">
+      <el-input v-model="account.password" show-password />
+    </el-form-item>
+  </el-form>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
 import { ElForm } from 'element-plus'
-import { rules } from '../config/account-config'
-import { useStore } from 'vuex'
-import LocalCache from '@/utils/cache'
+import { defineComponent, PropType, computed, ref } from 'vue'
+import { Account } from '../types'
+import { ElMessage } from 'element-plus'
+import localCache from '@/utils/cache'
+import { useStore } from '@/store/index'
 
 export default defineComponent({
-  setup() {
+  props: {
+    modelValue: {
+      type: Object as PropType<Account>,
+      default: () => ({})
+    }
+  },
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
     const store = useStore()
 
-    const account = reactive({
-      name: LocalCache.getCache('name') ?? '',
-      password: LocalCache.getCache('password') ?? ''
+    const account = computed({
+      get: () => props.modelValue,
+      set: (newValue) => emit('update:modelValue', newValue)
     })
+
+    const accountRules = {
+      name: [
+        { required: true, message: '必须输入用户名', trigger: 'blur' },
+        { pattern: /^[a-z0-9]{6,20}$/, message: '必须是6~20个字母或者数字', trigger: 'blur' }
+      ],
+      password: [
+        { required: true, message: '必须输入密码', trigger: 'blur' },
+        { pattern: /^[a-z0-9]{3,}$/, message: '必须是3位以上数字', trigger: 'blur' }
+      ]
+    }
+
+    // 验证form的函数
     const formRef = ref<InstanceType<typeof ElForm>>()
-    const LoginAction = (isKeepPassword: boolean) => {
-      // console.log('正在登陆')
+    const accountLoginAction = (isKeep: boolean) => {
+      // 1.验证是否成功
       formRef.value?.validate((valid) => {
         if (valid) {
-          // console.log(valid)
-          // 判断是否需要记住密码
-          if (isKeepPassword) {
-            // 进行本地缓存
-            LocalCache.setCache('name', account.name)
-            LocalCache.setCache('password', account.password)
-          } else {
-            LocalCache.deleteCache('name')
-            LocalCache.deleteCache('password')
+          // 登录逻辑
+          const name = account.value.name
+          const password = account.value.password
+
+          // 保存账号和密码
+          if (isKeep) {
+            localCache.setCache('name', name)
+            localCache.setCache('password', password)
           }
 
-          // 进行验证登录
-          store.dispatch('login/accountLoginAction', { ...account })
+          // 登录
+          store.dispatch('login/accountLoginAction', { name, password })
+        } else {
+          ElMessage.error('账号或者密码错误~')
         }
       })
     }
+
     return {
       account,
-      rules,
-      LoginAction,
-      formRef
+      accountRules,
+      formRef,
+      accountLoginAction
     }
   }
 })
 </script>
-<style lang="less" scoped>
-sss {
-  color: #000;
-}
-</style>
+
+<style scoped></style>

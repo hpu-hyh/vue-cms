@@ -1,9 +1,28 @@
-import hyRequest from '@/service'
-import { IDataType } from '../../typed'
+import hyRequest from '../../index'
 
-export function getPageListData(url: string, queryInfo: any) {
-  return hyRequest.post<IDataType>({
-    url: url,
+export function getPageList(pageUrl: string, queryInfo: any) {
+  return hyRequest.post({
+    url: pageUrl,
     data: queryInfo
+  })
+}
+
+export function deletePageData(pageUrl: string) {
+  return hyRequest.delete({
+    url: pageUrl
+  })
+}
+
+export function newPageData(pageUrl: string, newData: any) {
+  return hyRequest.post({
+    url: pageUrl,
+    data: newData
+  })
+}
+
+export function editPageData(pageUrl: string, editData: any) {
+  return hyRequest.patch({
+    url: pageUrl,
+    data: editData
   })
 }

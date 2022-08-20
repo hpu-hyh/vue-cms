@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import './assets/css/index.less'
+import './assets/css/index.css'
 import 'normalize.css'
 
 import router from './router'

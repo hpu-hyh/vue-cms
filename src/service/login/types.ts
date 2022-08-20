@@ -1,9 +1,10 @@
-export interface IAccount {
+export interface Account {
   name: string
   password: string
 }
-export interface ILoginResult {
+
+export interface LoginInfo {
   id: number
-  name: string
   token: string
+  name: string
 }

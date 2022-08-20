@@ -1,15 +1,19 @@
 <template>
-  <div class="nav-breadcrumb">
-    <el-breadcrumb separator="/">
-      <template v-for="item in breadcrumbs" :key="item.name">
-        <el-breadcrumb-item :to="{ path: item.path }">{{ item.name }}</el-breadcrumb-item>
+  <div class="hy-breadcrumb">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <template v-for="item in breadcrumbs" :key="item.path">
+        <el-breadcrumb-item :to="{ path: item.path }">
+          {{ item.name }}
+        </el-breadcrumb-item>
       </template>
     </el-breadcrumb>
   </div>
 </template>
+
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { IBreadcrumb } from '../type'
+import { IBreadcrumb } from '../types'
+
 export default defineComponent({
   props: {
     breadcrumbs: {
@@ -22,5 +26,5 @@ export default defineComponent({
   }
 })
 </script>
-<!-- <style lang="less" scoped>
-</style> -->
+
+<style scoped></style>

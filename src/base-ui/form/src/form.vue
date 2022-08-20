@@ -1,4 +1,3 @@
-<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="hy-form">
     <div class="header">
@@ -6,22 +5,42 @@
     </div>
     <el-form :label-width="labelWidth">
       <el-row>
-        <template v-for="item in formItems" :key="item.label">
+        <template v-for="(item, index) in formItems" :key="index">
           <el-col v-bind="colLayout">
-            <el-form-item :label="item.label" :rules="item.rules" :style="itemStyle">
+            <el-form-item
+              :label="item.label"
+              :rules="item.rules"
+              class="form-item"
+              :style="itemStyle"
+              v-if="!item.isHidden"
+            >
               <template v-if="item.type === 'input' || item.type === 'password'">
-                <el-input :placeholder="item.placeholder" :show-password="item.type === 'password'"
-                  v-model="formData[`${item.field}`]" />
+                <el-input
+                  v-model="formData[`${item.field}`]"
+                  :placeholder="item.placeHolder"
+                  :show-password="item.type === 'password'"
+                />
               </template>
               <template v-else-if="item.type === 'select'">
-                <el-select :placeholder="item.placeholder" style="width:100%" v-model="formData[`${item.field}`]">
-                  <el-option v-for="option in item.options" :value="option.value" :key="option.value">
-                    {{ option.title }}
-                  </el-option>
+                <el-select
+                  v-model="formData[`${item.field}`]"
+                  :placeholder="item.placeHolder"
+                  style="width: 100%"
+                >
+                  <el-option
+                    v-for="option in item.options"
+                    :key="option.value"
+                    :value="option.value"
+                    >{{ option.label }}</el-option
+                  >
                 </el-select>
               </template>
               <template v-else-if="item.type === 'datepicker'">
-                <el-date-picker v-bind="item.otherOptions" style="width:100%" v-model="formData[`${item.field}`]">
+                <el-date-picker
+                  v-model="formData[`${item.field}`]"
+                  v-bind="item.otherOption"
+                  style="width: 100%"
+                >
                 </el-date-picker>
               </template>
             </el-form-item>
@@ -38,19 +57,19 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from 'vue'
 import { IFormItem } from '../types'
+
 export default defineComponent({
   props: {
     modelValue: {
-      type: Object,
-      required: true
+      type: Object
+    },
+    labelWidth: {
+      type: String,
+      default: () => '80px'
     },
     formItems: {
       type: Array as PropType<IFormItem[]>,
       default: () => []
-    },
-    labelWidth: {
-      type: String,
-      default: '100px'
     },
     itemStyle: {
       type: Object,
@@ -59,15 +78,14 @@ export default defineComponent({
     colLayout: {
       type: Object,
       default: () => ({
-        xl: 6,
-        lg: 8,
-        md: 12,
-        sm: 24,
-        xs: 24
+        xl: 6, // ≥1920px
+        lg: 8, // ≥1200px
+        md: 12, // ≥992px
+        sm: 24, // ≥768px
+        xs: 24 // <768px
       })
     }
   },
-  name: 'overview',
   emit: ['update:modelValue'],
   setup(props, { emit }) {
     const formData = ref({ ...props.modelValue })
@@ -86,6 +104,7 @@ export default defineComponent({
   }
 })
 </script>
+
 <style scoped lang="less">
 .hy-form {
   padding: 20px 20px 0;

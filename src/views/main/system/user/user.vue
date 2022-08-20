@@ -1,90 +1,101 @@
-<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="user">
-    <PageSearch :searchFormConfig="searchFormConfig"></PageSearch>
-    <div class="content">
-      <HyTable :listData="userList" :propList="propList" :showIndexColumn="showIndexColumn"
-        :showSelectColumn="showSelectColumn">
-        <template #status="scope">
-          <el-button plain size="mini" :type="scope.row.enable ? 'success' : 'danger'">
-            {{ scope.row.enable ? '启用' : '禁用' }}
-          </el-button>
-        </template>
-        <!-- <template #createAt="scope">
-          <span>{{ $filter.formatTime(scope.row.createAt) }}</span>
-        </template>
-        <template #updateAt="scope">
-          <span>{{ $filter.formatTime(scope.row.updateAt) }}</span>
-        </template> -->
-      </HyTable>
-    </div>
+    <page-search
+      :searchConfig="searchFormConfig"
+      @queryBtnClick="handleQueryClick"
+      @resetBtnClick="handleResetClick"
+    />
+    <page-content
+      ref="pageContentRef"
+      :contentConfig="contentTableConfig"
+      pageName="users"
+      @newBtnClick="handleNewData"
+      @editBtnClick="handleEditData"
+    ></page-content>
+    <page-modal
+      ref="pageModalRef"
+      pageName="users"
+      :modalConfig="modalConfigRef"
+      :defaultInfo="modalInfo"
+    ></page-modal>
   </div>
 </template>
+
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { userStore } from '@/store'
-import { searchFormConfig } from './config/search.config'
+import { defineComponent, computed } from 'vue'
+import { useStore } from '@/store'
 import PageSearch from '@/components/page-search'
-import HyTable from '@/base-ui/table'
+import PageContent from '@/components/page-content'
+import PageModal from '@/components/page-modal'
+
+import { IFormItem } from '@/base-ui/form'
+
+import { usePageSearch } from '@/hooks/usePageSearch'
+import { usePageModal } from '@/hooks/usePageModal'
+
+import { searchFormConfig } from './config/search.config'
+import { contentTableConfig } from './config/content.config'
+import { modalConfig } from './config/modal.config'
 
 export default defineComponent({
+  name: 'user',
   components: {
     PageSearch,
-    HyTable
+    PageContent,
+    PageModal
   },
-  name: 'user',
   setup() {
-    const store = userStore()
-    store.dispatch('system/getPageListAction', {
-      pageUrl: './users/list',
-      queryInfo: {
-        offset: 0,
-        size: 10
-      }
-    })
-    const userList = computed(() => store.state.system.userList)
-    // const userCount = computed(() => store.state.system.userCount)
+    // 1.查询和重置处理
+    const [pageContentRef, handleQueryClick, handleResetClick] = usePageSearch()
 
-    const propList = [
-      // { prop: 'name', label: '用户名', minWidth: '100' },
-      // { prop: 'realname', label: '真实姓名', minWidth: '100' },
-      // { prop: 'cellphone', label: '手机号码', minWidth: '100' },
-      // { prop: 'enable', label: '状态', minWidth: '100' },
-      // { prop: 'createAt', label: '创建时间', minWidth: '250' },
-      // { prop: 'updateAt', label: '更新时间', minWidth: '250' }
-      { prop: 'name', label: '用户名', minWidth: '100', slotName: 'name' },
-      { prop: 'realname', label: '真实姓名', minWidth: '100', slotName: 'realname' },
-      { prop: 'cellphone', label: '手机号码', minWidth: '100', slotName: 'cellphone' },
-      { prop: 'enable', label: '状态', minWidth: '100', slotName: 'status' },
-      { prop: 'createAt', label: '创建时间', minWidth: '250', slotName: 'createAt' },
-      { prop: 'updateAt', label: '更新时间', minWidth: '250', slotName: 'updateAt' }
-    ]
-    const showIndexColumn = true
-    const showSelectColumn = true
+    // 配置信息
+    const store = useStore()
+    const modalConfigRef = computed(() => {
+      const roleOption: IFormItem | undefined = modalConfig.formItems?.find(
+        (item) => item.field === 'roleId'
+      )
+      roleOption!.options = store.state.entireRoles.map((item: any) => {
+        return { label: item.name, value: item.id }
+      })
+      const departmentOption: IFormItem | undefined = modalConfig.formItems?.find(
+        (item) => item.field === 'departmentId'
+      )
+      departmentOption!.options = store.state.entireDepartments.map((item: any) => {
+        return { label: item.name, value: item.id }
+      })
+      return modalConfig
+    })
+
+    // modal handle
+    const newHandleCallback = () => {
+      const passwordItem = modalConfigRef.value.formItems?.find((item) => item.field === 'password')
+      passwordItem!.isHidden = false
+    }
+    const editHandleCallback = () => {
+      const passwordItem = modalConfigRef.value.formItems?.find((item) => item.field === 'password')
+      passwordItem!.isHidden = true
+    }
+
+    // 处理的hook
+    const [modalInfo, pageModalRef, handleNewData, handleEditData] = usePageModal(
+      newHandleCallback,
+      editHandleCallback
+    )
 
     return {
       searchFormConfig,
-      userList,
-      propList,
-      showIndexColumn,
-      showSelectColumn
+      contentTableConfig,
+      handleQueryClick,
+      handleResetClick,
+      pageContentRef,
+      handleNewData,
+      handleEditData,
+      pageModalRef,
+      modalConfigRef,
+      modalInfo
     }
   }
 })
 </script>
 
-<style scoped lang="less">
-.header {
-  color: rgb(10, 96, 189);
-}
-
-.handle-btns {
-  text-align: right;
-  padding: 0 50px 50px 0;
-}
-
-.content {
-  padding: 20px;
-  border-top: 20px solid #f5f5f5;
-}
-</style>
+<style scoped lang="less"></style>

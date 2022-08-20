@@ -1,62 +1,64 @@
-<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="nav-header">
-    <i class="fold-menu" :class="isFold ? ' el-icon-s-fold' : ' el-icon-s-unfold'" @click="handleFoldClick"></i>
+    <i
+      class="menu-icon"
+      :class="isFold ? 'el-icon-s-fold' : 'el-icon-s-unfold'"
+      @click="handleFoldClick"
+    ></i>
+
     <div class="content">
-      <div>
-        <HyBreadcrumb :breadcrumbs="breadcrumbs" />
-      </div>
-      <div>
-        <userInfo></userInfo>
-      </div>
+      <hy-breadcrumb :breadcrumbs="breadcrumbs" />
+      <nav-info />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import userInfo from './user-info.vue'
-import HyBreadcrumb from '@/base-ui/breadcrumb'
-import { pathMapBreadcrumbs } from '@/utils/map-menus'
-import { userStore } from '@/store'
+import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from '@/store'
+
+import { pathMapBreadcrumbs } from '@/utils/map-menu'
+
+import NavInfo from './nav-info.vue'
+import HyBreadcrumb from '@/base-ui/breadcrumb'
+
+import useMenuIcon from '../hooks/useMenuIconHook'
+
 export default defineComponent({
   components: {
-    userInfo,
+    NavInfo,
     HyBreadcrumb
   },
   emits: ['foldChange'],
-  setup(props, { emit }) {
-    const isFold = ref(false)
-    const handleFoldClick = () => {
-      isFold.value = !isFold.value
-      emit('foldChange', isFold.value)
-    }
-    //面包屑
-    const store = userStore()
+  setup(props, ctx) {
+    // 1.菜单icon
+    const [isFold, handleFoldClick] = useMenuIcon({ emit: ctx.emit })
+
+    // 2.获取菜单列表
     const breadcrumbs = computed(() => {
-      const userMenus = store.state.login.userMenus
-      const route = useRoute()
-      const currtentPath = route.path
-      return pathMapBreadcrumbs(userMenus, currtentPath)
+      const path = useRoute().path
+      const userMenus = useStore().state.login.userMenus
+      return pathMapBreadcrumbs(userMenus, path)
     })
 
     return {
       isFold,
-      handleFoldClick,
-      breadcrumbs
+      breadcrumbs,
+      handleFoldClick
     }
   }
 })
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
 .nav-header {
   display: flex;
-  width: 100%;
+  align-items: center;
+  flex: 1;
 
-  .fold-menu {
-    font-size: 30px;
+  .menu-icon {
+    font-size: 28px;
     cursor: pointer;
   }
 
@@ -65,7 +67,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     flex: 1;
-    padding: 0 20px;
+    padding: 0 18px;
   }
 }
 </style>

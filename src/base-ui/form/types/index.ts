@@ -1,18 +1,26 @@
-type IFormType = 'input' | 'password' | 'select' | 'datepicker'
+interface ISelectOption {
+  label: string
+  value: any
+}
+
+type ItemType = 'input' | 'password' | 'select' | 'datepicker'
 
 export interface IFormItem {
   field: string
-  type: IFormType
+  type: ItemType
   label: string
-  rules?: any
-  placeholder?: any
-  options?: any[]
-  otherOptions?: any
+  placeHolder?: string
+  rules?: any[]
+  options?: ISelectOption[]
+  otherOption?: any
+  defaultValue?: any
+  isHidden?: boolean
 }
+
 export interface IForm {
-  // title?: string
-  formItems: IFormItem[]
+  title?: string
+  formItems?: IFormItem[]
   labelWidth?: string
-  itemLayout: any
+  itemStyle: any
   colLayout: any
 }

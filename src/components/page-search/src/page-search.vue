@@ -1,54 +1,80 @@
 <template>
-  <div class="page-search">
-    <HyForm v-bind="searchFormConfig" v-model="formData">
-      <template #header>
-        <h1 class="header">高级检索</h1>
-      </template>
+  <div>
+    <hy-form v-bind="searchConfig" v-model="formData">
       <template #footer>
-        <div class="handle-btns">
-          <el-button type="primary" icon="el-icon-refresh">重置</el-button>
-          <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <div class="btns">
+          <el-button size="medium" icon="el-icon-refresh" @click="handleResetClick">重置</el-button>
+          <el-button type="primary" size="medium" icon="el-icon-search" @click="handleQueryClick"
+            >查询</el-button
+          >
         </div>
       </template>
-    </HyForm>
+    </hy-form>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
 
-import HyForm from '@/base-ui/form'
+<script lang="ts">
+import { defineComponent, PropType, ref } from 'vue'
+
+import HyForm, { IForm } from '@/base-ui/form'
+
+interface IFormData {
+  [key: string]: any
+}
 
 export default defineComponent({
-  props: {
-    searchFormConfig: {
-      type: Object,
-      required: true
-    }
-  },
   components: {
     HyForm
   },
-  setup() {
-    const formData = ref({
-      id: '',
-      name: '',
-      password: '',
-      sport: '',
-      createTime: ''
-    })
+  props: {
+    searchConfig: {
+      type: Object as PropType<IForm>,
+      required: true
+    },
+    title: {
+      type: String,
+      default: '高级检索'
+    }
+  },
+  emits: ['queryBtnClick', 'resetBtnClick'],
+  setup(props, { emit }) {
+    const originFormData: IFormData = {}
+    const formItems = props.searchConfig.formItems ?? []
+    for (const formItem of formItems) {
+      originFormData[`${formItem.field}`] = ''
+    }
+
+    const formData = ref<IFormData>({ ...originFormData })
+
+    const handleResetClick = () => {
+      for (const key in originFormData) {
+        formData.value[`${key}`] = originFormData[key]
+      }
+      emit('resetBtnClick')
+    }
+
+    const handleQueryClick = () => {
+      console.log({ ...formData.value })
+      emit('queryBtnClick', formData.value)
+    }
+
     return {
-      formData
+      formData,
+      handleResetClick,
+      handleQueryClick
     }
   }
 })
 </script>
-<style scoped lang="less">
-.header {
-  color: rgb(10, 96, 189);
+
+<style scoped>
+.title {
+  padding-left: 30px;
+  text-align: left;
 }
 
-.handle-btns {
+.btns {
   text-align: right;
-  padding: 0 50px 50px 0;
+  padding: 0 50px 20px 0;
 }
 </style>

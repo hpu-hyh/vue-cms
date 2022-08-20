@@ -1,11 +1,12 @@
 <template>
-  <div class="not-found">
-    <h2 class="text">NOT FOUND!</h2>
+  <div>
+    <h2>页面加载错误, 请联系管理员~</h2>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
 export default defineComponent({
   setup() {
     return {}
@@ -13,10 +14,4 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less">
-.not-found {
-  .text {
-    text-align: center;
-  }
-}
-</style>
+<style scoped></style>

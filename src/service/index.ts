@@ -5,7 +5,7 @@ import localCache from '@/utils/cache'
 const hyRequest = new HYRequest({
   baseURL: API_BASE_URL,
   timeout: TIME_OUT,
-  interceptors: {
+  interceptorHooks: {
     requestInterceptor: (config) => {
       const token = localCache.getCache('token')
       if (token) {
@@ -19,7 +19,7 @@ const hyRequest = new HYRequest({
     responseInterceptor: (res) => {
       return res.data
     },
-    responseInterceptorCatch: (err: any) => {
+    responseInterceptorCatch: (err) => {
       return err
     }
   }

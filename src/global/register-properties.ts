@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { utcToDateTimeFormat } from '@/utils/date-format'
+import { utcToDateTimeFormat } from '@/utils/date-formt'
 
 function registerGlobalProperties(app: App) {
   app.config.globalProperties.$filters = {

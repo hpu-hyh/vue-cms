@@ -2,11 +2,11 @@
   <div class="main">
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
-        <NavMenu :collapse="isCollapse" />
+        <nav-menu :collapse="isCollapse" />
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
-          <NavHeader @foldChange="handleFoldChange" />
+          <nav-header @foldChange="foldChange" />
         </el-header>
         <el-main class="page-content">
           <div class="content">
@@ -29,20 +29,21 @@ export default defineComponent({
     NavHeader
   },
   setup() {
+    // 1.保存是否当前处于折叠状态
     const isCollapse = ref(false)
-    const handleFoldChange = (isFold: boolean) => {
-      // console.log(isFold)
+    const foldChange = (isFold: boolean) => {
       isCollapse.value = isFold
     }
+
     return {
-      handleFoldChange,
-      isCollapse
+      isCollapse,
+      foldChange
     }
   }
 })
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 .main {
   position: fixed;
   top: 0;
@@ -85,10 +86,8 @@ export default defineComponent({
   cursor: pointer;
   background-color: #001529;
   transition: width 0.3s linear;
-  scrollbar-width: none;
-  /* firefox */
-  -ms-overflow-style: none;
-  /* IE 10+ */
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 
   &::-webkit-scrollbar {
     display: none;

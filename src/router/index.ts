@@ -1,12 +1,14 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { RouteRecordRaw } from 'vue-router'
-import LocalCache from '@/utils/cache'
-import { firstMenu } from '@/utils/map-menus'
+
+import { firstRoute } from '@/utils/map-menu'
+
+import localCache from '@/utils/cache'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/main'
+    redirect: 'main'
   },
   {
     path: '/login',
@@ -20,7 +22,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/:pathMatch(.*)*',
-    name: 'not-found',
+    name: 'notFound',
     component: () => import('@/views/not-found/not-found.vue')
   }
 ]
@@ -30,16 +32,17 @@ const router = createRouter({
   history: createWebHashHistory()
 })
 
-//导航守卫
 router.beforeEach((to) => {
   if (to.path !== '/login') {
-    const token = LocalCache.getCache('token')
+    const token = localCache.getCache('token')
     if (!token) {
       return '/login'
     }
-  }
-  if (to.path === '/main') {
-    return firstMenu.url
+
+    if (to.path === '/main') {
+      console.log(firstRoute)
+      return firstRoute?.path
+    }
   }
 })
 
